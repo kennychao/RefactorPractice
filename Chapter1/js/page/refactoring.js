@@ -24,18 +24,17 @@ function statement(invoices,plays){
 											minimunFractionDigits:2}).format;
 
 	for(let perf of invoices.performances){
-		const play = plays[perf.playID];
-
-		let thisAmount = amountFor(perf, play);
+		
+		let thisAmount = amountFor(perf);
 
 		
 		//加入 volume credit
 		volumeCredits += Math.max(perf.audience -30,0);
 		//每十名喜劇觀眾可獲得額外點數
-		if("comedy" === play.type) volumeCredits += Math.floor(perf.audience/5);
+		if("comedy" === playFor(perf).type) volumeCredits += Math.floor(perf.audience/5);
 
 		//印出這筆訂單
-		result += `${play.name} : ${format(thisAmount/100)} (${perf.audience} seats)\n`;
+		result += `${playFor(perf).name} : ${format(thisAmount/100)} (${perf.audience} seats)\n`;
 		totalAmount += thisAmount;
 
 	}
@@ -49,10 +48,10 @@ function statement(invoices,plays){
 
 
 
-function amountFor(aperformance,play){
+function amountFor(aperformance){
 	let result = 0;
 
-	switch(play.type){
+	switch(playFor(aperformance).type){
 		case "tragedy":
 			result = 40000;
 			if(aperformance.audience > 30){
@@ -67,10 +66,15 @@ function amountFor(aperformance,play){
 			result += 300 * aperformance.audience;
 			break;
 		default:
-			throw new Error(`unknown type: ${play.type}`);
+			throw new Error(`unknown type: ${playFor(aperformance).type}`);
 		}
 
 	return result;
+}
+
+
+function playFor(aperformance){
+	return plays[aperformance.playID];
 }
 
 
