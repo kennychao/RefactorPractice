@@ -25,26 +25,10 @@ function statement(invoices,plays){
 
 	for(let perf of invoices.performances){
 		const play = plays[perf.playID];
-		let thisAmount = 0;
 
-		switch(play.type){
-		case "tragedy":
-			thisAmount = 40000;
-			if(perf.audience > 30){
-				thisAmount += 1000 * (perf.audience - 30);
-			}
-			break;
-		case "comedy":
-			thisAmount = 30000;
-			if(perf.audience > 20){
-				thisAmount += 10000 + 500 * (perf.audience - 20);
-			}
-			thisAmount += 300 * perf.audience;
-			break;
-		default:
-			throw new Error(`unknown type: ${play.type}`);
-		}
+		let thisAmount = amountFor(perf, play);
 
+		
 		//加入 volume credit
 		volumeCredits += Math.max(perf.audience -30,0);
 		//每十名喜劇觀眾可獲得額外點數
@@ -61,6 +45,40 @@ function statement(invoices,plays){
 
 	return result;
 }
+
+
+
+
+function amountFor(aperformance,play){
+	let result = 0;
+
+	switch(play.type){
+		case "tragedy":
+			result = 40000;
+			if(aperformance.audience > 30){
+				result += 1000 * (aperformance.audience - 30);
+			}
+			break;
+		case "comedy":
+			result = 30000;
+			if(aperformance.audience > 20){
+				result += 10000 + 500 * (aperformance.audience - 20);
+			}
+			result += 300 * aperformance.audience;
+			break;
+		default:
+			throw new Error(`unknown type: ${play.type}`);
+		}
+
+	return result;
+}
+
+
+
+
+
+
+
 
 
 $(document).ready(function(){
