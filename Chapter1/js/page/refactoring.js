@@ -17,17 +17,11 @@ var invoices = {
 
 function statement(invoices,plays){
 	let totalAmount = 0;
-	let volumeCredits = 0;
 	let result = `Statement for ${invoices.customer}\n`;
-	// const format = new Intl.NumberFormat("en-US",
-	// 									{ style:"currency", currency:"USD",
-	// 										minimunFractionDigits:2}).format;
 
 	for(let perf of invoices.performances){
 		
 		let thisAmount = amountFor(perf);
-
-		volumeCredits = volumeCreditsFor(perf);
 
 		//印出這筆訂單
 		result += `${playFor(perf).name} : ${formatAsUSD(amountFor(perf))} (${perf.audience} seats)\n`;
@@ -36,7 +30,7 @@ function statement(invoices,plays){
 	}
 
 	result += `Amount owed is ${formatAsUSD(totalAmount)}\n`;
-	result += `You earnrd ${volumeCredits} credits\n`
+	result += `You earnrd ${totalVolumeCredits()} credits\n`
 
 	return result;
 }
@@ -92,6 +86,17 @@ function formatAsUSD(aNumber){
 	return new Intl.NumberFormat("en-US",
 						{ style:"currency", currency:"USD",
 							minimunFractionDigits:2}).format(aNumber/100);
+}
+
+
+function totalVolumeCredits(){
+	let volumeCredits = 0;
+	for(let perf of invoices.performances){
+
+		volumeCredits = volumeCreditsFor(perf);
+
+	}
+	return volumeCredits;
 }
 
 
