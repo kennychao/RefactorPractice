@@ -16,20 +16,18 @@ var invoices = {
 
 
 function statement(invoices,plays){
-	let totalAmount = 0;
 	let result = `Statement for ${invoices.customer}\n`;
 
 	for(let perf of invoices.performances){
-		
-		let thisAmount = amountFor(perf);
 
 		//印出這筆訂單
 		result += `${playFor(perf).name} : ${formatAsUSD(amountFor(perf))} (${perf.audience} seats)\n`;
-		totalAmount += thisAmount;
 
 	}
 
-	result += `Amount owed is ${formatAsUSD(totalAmount)}\n`;
+	// let totalAmount = totalAmount1();
+
+	result += `Amount owed is ${formatAsUSD(totalAmount())}\n`;
 	result += `You earnrd ${totalVolumeCredits()} credits\n`
 
 	return result;
@@ -99,6 +97,16 @@ function totalVolumeCredits(){
 	return volumeCredits;
 }
 
+
+function totalAmount(){
+	let totalAmount = 0;
+	for(let perf of invoices.performances){
+
+		totalAmount += amountFor(perf);
+
+	}
+	return totalAmount;
+}
 
 
 
